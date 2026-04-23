@@ -1,0 +1,28 @@
+{
+  "name": "final-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hugo-RM/CST-336-final-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hugo-RM/CST-336-final-project/issues"
+  },
+  "homepage": "https://github.com/Hugo-RM/CST-336-final-project#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.22.2",
+    "node-fetch": "^3.3.2"
+  }
+}
