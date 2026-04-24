@@ -4,6 +4,18 @@ import mysql from 'mysql2/promise';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 
+const steam_api_key = 'STEAM_API_KEY_REDACTED'
+//this is Jaime's API KEY for this purpose
+const steam_search_tag_id = 'https://store.steampowered.com/search/?tags=' 
+// must add the TAG ID
+const steam_search_tag_string = 'https://steamspy.com/api.php?request=tag&tag='
+// must add the TAG as a String for example: ...tag&tag=Horror
+const steam_retrieve_game_info = 'https://store.steampowered.com/api/appdetails?appids='
+//must add the game ID at the, end link will retrieve game info as  a JSON
+const steam_game_applist = 'https://api.steampowered.com/IStoreService/GetAppList/v1/?key='
+//must add the API key in order to work. Additionally, other parameters can be added to the search
+//for better filtering
+
 const app = express();
 
 app.set('view engine', 'ejs');
