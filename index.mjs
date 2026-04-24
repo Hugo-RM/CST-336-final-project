@@ -33,6 +33,35 @@ app.get('/', async(req, res) => {
     res.render('login.ejs');
 });
 
+app.get('/login', async(req, res) => {
+    let {username, password} = req.body;
+    console.log(username + ": " + password);
+
+    let hashedPassword = "";
+
+    let sql = `SELECT *
+               FROM admin
+               WHERE username = ?`;
+
+    const sqlParams = [username];
+    const [rows] = await pool.query(sql, sqlParams);
+
+    if (rows.length > 0) { //username was found in the database
+        hashedPassword = rows[0].password;
+    }
+    
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (match) {
+        req.session.authenticated = true;
+        req.session.fullName = `${rows[0].firstName} ${rows[0].lastName}`;
+        res.render('welcome.ejs', {'fullName' : req.session.fullName});
+    } else {
+        let loginError = 'Wrong Credentials';
+        res.render('login.ejs', {loginError});
+    }
+});
+
 // ==================== DB TEST ====================
 
 app.get("/dbTest", async (req, res) => {
