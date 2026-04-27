@@ -33,8 +33,12 @@ app.get('/', async(req, res) => {
     res.render('login.ejs');
 });
 
-app.get('/login', async(req, res) => {
-    let {username, password} = req.body;
+app.post('/login', async(req, res) => {
+    console.log(req.body);
+
+    let username = req.body.username;
+    let password = req.body.password;
+
     console.log(username + ": " + password);
 
     let hashedPassword = "";
@@ -46,16 +50,17 @@ app.get('/login', async(req, res) => {
     const sqlParams = [username];
     const [rows] = await pool.query(sql, sqlParams);
 
-    if (rows.length > 0) { //username was found in the database
+    if (rows.length > 0) {
         hashedPassword = rows[0].password;
     }
-    
+
     const match = await bcrypt.compare(password, hashedPassword);
+
+    console.log(match);
 
     if (match) {
         req.session.authenticated = true;
-        req.session.fullName = `${rows[0].firstName} ${rows[0].lastName}`;
-        res.render('welcome.ejs', {'fullName' : req.session.fullName});
+        res.render('home.ejs');
     } else {
         let loginError = 'Wrong Credentials';
         res.render('login.ejs', {loginError});
