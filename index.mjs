@@ -4,9 +4,9 @@ import mysql from 'mysql2/promise';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 
-const steam_api_key = 'FADA2CAFB6C786129460E3AB9BD0CDB7'
-//this is Jaime's API KEY for this purpose
-const steam_search_tag_id = 'https://store.steampowered.com/search/?tags=' 
+
+const steam_api_key = process.env.STEAM_API_KEY
+const steam_search_tag_id = 'https://store.steampowered.com/search/?tags='
 // must add the TAG ID
 const steam_search_tag_string = 'https://steamspy.com/api.php?request=tag&tag='
 // must add the TAG as a String for example: ...tag&tag=Horror
