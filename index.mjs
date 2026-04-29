@@ -4,7 +4,6 @@ import mysql from 'mysql2/promise';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 
-
 const steam_api_key = process.env.STEAM_API_KEY
 const steam_search_tag_id = 'https://store.steampowered.com/search/?tags='
 // must add the TAG ID
@@ -48,7 +47,8 @@ app.use(session({
 
 //routes
 app.get('/', async(req, res) => {
-    res.render('login.ejs');
+    res.render('home');
+    //remember to switch to login page when it is done
 });
 
 // ==================== DB TEST ====================
@@ -77,5 +77,3 @@ function isUserAuthenticated(req, res, next) {
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 })
-
-
