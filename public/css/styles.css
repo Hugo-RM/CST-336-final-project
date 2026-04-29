@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+#my-title {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: black 2px;
+}
+
+header {
+    background-color: #0077ff;
+    padding: 10px;
+    text-align: center;
+}
