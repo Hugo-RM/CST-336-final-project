@@ -6,7 +6,26 @@
 <body>
     <h1> Search for Game </h1>
     
-
+    <form method="GET" action="/searchGame">
+        <input type="text" name="name" placeholder="Enter game name">
+        <button type="submit">Search</button>
+    </form>
+    
+    <% if (game) { %>
+        <h2><%= game.name %></h2>
+    
+        <img src="<%= game.header_image %>" width="300">
+    
+        <p><%= game.short_description %></p>
+    
+        <p>Release Date: <%= game.release_date.date %></p>
+    
+        <p>
+            Positive Ratings: <%= spyData?.positive %> <br>
+            Negative Ratings: <%= spyData?.negative %>
+        </p>
+    
+    <% } %>
 
 
     <%- include("partials/footer.ejs") %>
