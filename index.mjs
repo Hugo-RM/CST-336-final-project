@@ -62,8 +62,8 @@ app.get('/games', async (req, res) => {
         res.render('home.ejs', { games });
 
     } catch (err) {
-        // console.error(err);
-        // res.send("Error fetching games");
+        console.error(err);
+        res.send("Error fetching games");
     }
 });
 
@@ -104,8 +104,8 @@ app.get('/searchGame', async (req, res) => {
         res.render('home.ejs', { game, spyData });
 
     } catch (err) {
-        // console.error(err);
-        // res.send("Error searching game");
+        console.error(err);
+        res.send("Error searching game");
     }
 });
 
