@@ -138,7 +138,7 @@ app.post('/login', async(req, res) => {
 
     if (match) {
         req.session.authenticated = true;
-        res.render('home.ejs');
+        res.render('home.ejs', { game: null, spyData: null });
     } else {
         let loginError = 'Wrong Credentials';
         res.render('login.ejs', {loginError});
