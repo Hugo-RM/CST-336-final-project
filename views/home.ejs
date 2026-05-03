@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
     <%- include("partials/header.ejs") %>
+    <style>
+        #rating {
+            width: <%= rating %>%;
+            background: green;
+            color: white;
+            padding: 5px;
+            border-radius: 10px;
+        }
+    </style>
 
 </head>
 <body>
@@ -14,15 +23,6 @@
     </form>
 
     <hr>
-
-    <% 
-    let rating = null;
-
-    if (spyData && spyData.positive && spyData.negative) {
-        let total = spyData.positive + spyData.negative;
-        rating = Math.round((spyData.positive / total) * 100);
-    }
-    %>
 
     <% if (game) { %>
         <div style="margin-top:20px;">
@@ -48,12 +48,7 @@
             <% if (rating !== null) { %>
                 <p><strong>Rating:</strong></p>
                 <div style="width:300px; background:#ddd; border-radius:10px;">
-                    <div style="
-                        width:<%= rating %>%;
-                        background:green;
-                        color:white;
-                        padding:5px;
-                        border-radius:10px;">
+                    <div id="rating">
                         <%= rating %>% Positive
                     </div>
                 </div>
