@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;900&display=swap');
 
 #my-title {
     font-family: 'Pixelify Sans', sans-serif;
     font-size: 80px;
     font-weight: bold;
     color: white;
-    -webkit-text-stroke: black 4px;
+    /* -webkit-text-stroke: black 4px; */
 }
 
 .title-like {
@@ -17,26 +18,75 @@
 }
 
 header {
-    background-color: #0077ff;
+    background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
     padding: 10px;
     text-align: center;
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3);
+    animation: headerGlow 2s infinite;
+}
+
+@keyframes headerGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3);
+        background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 194, 194, 0.9), inset 0 0 30px rgba(100, 230, 230, 0.5), 0 0 40px rgba(0, 180, 200, 0.5);
+        background: linear-gradient(135deg, #64e6e6, #00c2c2, #00b4c8);
+    }
 }
 
 header button,
 header .btn {
-    background: rgba(255,255,255,0.55);
-    color: #0b1220;
-    border: 1px solid rgba(0,0,0,0.12);
+    font-family: 'Baloo 2', sans-serif;
+    background: rgba(0, 194, 194, 0.15);
+    color: #000000;
+    border: 2px solid rgba(0, 194, 194, 0.5);
     font-weight: 700;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
     backdrop-filter: blur(4px);
     transition: all 0.3s ease;
+    animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 15px rgba(100, 230, 230, 0.4);
+    }
 }
 
 header button:hover,
 header .btn:hover {
-    background: rgba(255,255,255,0.75);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    background: rgba(0, 194, 194, 0.25);
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
+    transform: scale(1.05);
+}
+
+.nav-buttons {
+    font-family: 'Baloo 2', sans-serif;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    display: inline-block;
+    background: rgba(0, 194, 194, 0.15);
+    border: 2px solid rgba(0, 194, 194, 0.5);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    animation: buttonPulse 1.5s infinite;
+    font-weight: 600;
+}
+
+.nav-buttons:hover {
+    background: rgba(0, 194, 194, 0.25);
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
+    transform: scale(1.05);
+    color: #000000;
 }
 
 /* Styles for login page (moved from views/login.ejs) */
@@ -111,29 +161,29 @@ header .btn:hover {
 /* Retro Login Button Styling */
 @keyframes retroPulse {
     0%, 100% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7),
-                    inset 0 2px 0 #00ffff,
-                    inset 0 -2px 0 #0088ff;
+        box-shadow: 0 0 0 0 rgba(0, 194, 194, 0.7),
+                    inset 0 2px 0 #00c2c2,
+                    inset 0 -2px 0 #008c8c;
     }
     50% {
-        box-shadow: 0 0 20px 10px rgba(0, 255, 255, 0),
-                    inset 0 2px 0 #00ffff,
-                    inset 0 -2px 0 #0088ff;
+        box-shadow: 0 0 20px 10px rgba(0, 194, 194, 0),
+                    inset 0 2px 0 #64e6e6,
+                    inset 0 -2px 0 #008c8c;
     }
 }
 
 @keyframes retroGlow {
     0%, 100% {
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        text-shadow: 0 0 10px rgba(0, 194, 194, 0.8);
     }
     50% {
-        text-shadow: 0 0 20px rgba(0, 255, 255, 1), 0 0 30px rgba(0, 200, 255, 0.6);
+        text-shadow: 0 0 20px rgba(0, 194, 194, 1), 0 0 30px rgba(0, 180, 200, 0.6);
     }
 }
 
 .retro-login-btn {
     font-family: 'Pixelify Sans', sans-serif !important;
-    background: linear-gradient(145deg, #00ffff, #00ccff);
+    background: linear-gradient(145deg, #00c2c2, #64e6e6);
     color: #000000 !important;
     border: 3px solid #000000 !important;
     font-size: 18px;
@@ -143,19 +193,19 @@ header .btn:hover {
     text-transform: uppercase;
     letter-spacing: 2px;
     transition: all 0.1s ease;
-    box-shadow: inset 0 2px 0 #00ffff, inset 0 -2px 0 #0088ff, 0 5px 0 #000000;
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 5px 0 #000000;
     animation: retroPulse 1.5s infinite, retroGlow 1.5s infinite;
     position: relative;
     top: 0;
 }
 
 .retro-login-btn:hover {
-    background: linear-gradient(145deg, #00ffff, #00ccff);
+    background: linear-gradient(145deg, #64e6e6, #00c2c2);
     transform: translateY(2px);
-    box-shadow: inset 0 2px 0 #00ffff, inset 0 -2px 0 #0088ff, 0 3px 0 #000000;
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 3px 0 #000000;
 }
 
 .retro-login-btn:active {
     transform: translateY(5px);
-    box-shadow: inset 0 2px 0 #00ffff, inset 0 -2px 0 #0088ff, 0 0 0 #000000;
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 0 0 #000000;
 }
