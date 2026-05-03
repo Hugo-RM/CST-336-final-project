@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;900&display=swap');
 
 #my-title {
     font-family: 'Pixelify Sans', sans-serif;
     font-size: 80px;
     font-weight: bold;
     color: white;
-    -webkit-text-stroke: black 4px;
+    /* -webkit-text-stroke: black 4px; */
 }
 
 .title-like {
@@ -17,7 +18,194 @@
 }
 
 header {
-    background-color: #0077ff;
+    background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
     padding: 10px;
     text-align: center;
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3);
+    animation: headerGlow 2s infinite;
+}
+
+@keyframes headerGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3);
+        background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 194, 194, 0.9), inset 0 0 30px rgba(100, 230, 230, 0.5), 0 0 40px rgba(0, 180, 200, 0.5);
+        background: linear-gradient(135deg, #64e6e6, #00c2c2, #00b4c8);
+    }
+}
+
+header button,
+header .btn {
+    font-family: 'Baloo 2', sans-serif;
+    background: rgba(0, 194, 194, 0.15);
+    color: #000000;
+    border: 2px solid rgba(0, 194, 194, 0.5);
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 15px rgba(100, 230, 230, 0.4);
+    }
+}
+
+header button:hover,
+header .btn:hover {
+    background: rgba(0, 194, 194, 0.25);
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
+    transform: scale(1.05);
+}
+
+.nav-buttons {
+    font-family: 'Baloo 2', sans-serif;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    display: inline-block;
+    background: rgba(0, 194, 194, 0.15);
+    border: 2px solid rgba(0, 194, 194, 0.5);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    animation: buttonPulse 1.5s infinite;
+    font-weight: 600;
+}
+
+.nav-buttons:hover {
+    background: rgba(0, 194, 194, 0.25);
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
+    transform: scale(1.05);
+    color: #000000;
+}
+
+/* Styles for login page (moved from views/login.ejs) */
+.login-page {
+    background-image: url('https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/09/video-game-collection.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+.login-page h1 {
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
+.login-page form {
+    background: rgba(255,255,255,0.55);
+    display: inline-block;
+    padding: 20px;
+    border-radius: 8px;
+    color: #0b1220;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+}
+
+.login-page form label,
+.login-page form p {
+    color: #071021;
+    font-weight: 600;
+}
+
+.login-page form input[type="text"],
+.login-page form input[type="password"],
+.login-page form input[type="email"],
+.login-page form textarea,
+.login-page form select {
+    background: rgba(255,255,255,0.96);
+    color: #000000;
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 6px 8px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.login-page form input::placeholder,
+.login-page form textarea::placeholder {
+    color: rgba(0,0,0,0.45);
+}
+
+.login-page .loginDiv {
+    position: relative;
+    display: inline-block;
+}
+
+.login-page .loginIcon {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    cursor: pointer;
+}
+
+.login-page .btn {
+    font-weight: 700;
+}
+
+.loveagame-pixel {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-weight: bold;
+}
+
+/* Retro Login Button Styling */
+@keyframes retroPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 194, 194, 0.7),
+                    inset 0 2px 0 #00c2c2,
+                    inset 0 -2px 0 #008c8c;
+    }
+    50% {
+        box-shadow: 0 0 20px 10px rgba(0, 194, 194, 0),
+                    inset 0 2px 0 #64e6e6,
+                    inset 0 -2px 0 #008c8c;
+    }
+}
+
+@keyframes retroGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(0, 194, 194, 0.8);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(0, 194, 194, 1), 0 0 30px rgba(0, 180, 200, 0.6);
+    }
+}
+
+.retro-login-btn {
+    font-family: 'Pixelify Sans', sans-serif !important;
+    background: linear-gradient(145deg, #00c2c2, #64e6e6);
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 15px 40px !important;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.1s ease;
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 5px 0 #000000;
+    animation: retroPulse 1.5s infinite, retroGlow 1.5s infinite;
+    position: relative;
+    top: 0;
+}
+
+.retro-login-btn:hover {
+    background: linear-gradient(145deg, #64e6e6, #00c2c2);
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 3px 0 #000000;
+}
+
+.retro-login-btn:active {
+    transform: translateY(5px);
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 0 0 #000000;
 }

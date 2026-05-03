@@ -47,7 +47,7 @@ app.use(session({
 
 //routes
 app.get('/', async(req, res) => {
-    res.render('login.ejs');
+    res.render('login');
 });
 
 app.post('/login', async(req, res) => {
