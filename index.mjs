@@ -189,8 +189,27 @@ app.get('/searchGame', async (req, res) => {
     }
 });
 
+app.get('/games/new', isUserAuthenticated, (req, res) => {
+  res.render('newGame.ejs');
+});
 
+app.post('/games/new', isUserAuthenticated, async (req, res) => {
+  const { title, genre, platform, rating } = req.body;
 
+  const sql = `
+    INSERT INTO games (title, genre, platform, rating)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  await pool.query(sql, [title, genre, platform, rating]);
+
+  res.redirect('/games');
+});
+
+app.get('/games', isUserAuthenticated, async (req, res) => {
+  const [games] = await pool.query('SELECT * FROM games ORDER BY title');
+  res.render('games.ejs', { games });
+});
 
 app.post('/login', async(req, res) => {
     console.log(req.body);

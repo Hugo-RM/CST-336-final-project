@@ -1,0 +1,18 @@
+<%- include("partials/header.ejs") %>
+
+<h1>Saved Games</h1>
+
+<a href="/games/new">Add New Game</a>
+
+<ul>
+  <% games.forEach(game => { %>
+    <li>
+      <strong><%= game.title %></strong> —
+      <%= game.genre %>,
+      <%= game.platform %>,
+      Rating: <%= game.rating %>/10
+    </li>
+  <% }) %>
+</ul>
+
+<%- include("partials/footer.ejs") %>
