@@ -2,31 +2,94 @@
 <html lang="en">
 <head>
     <%- include("partials/header.ejs") %>
+
 </head>
 <body>
-    <h1> Search for Game </h1>
-  
-    <form method="GET" action="/searchGame">
+
+    <h1>Search for a Game</h1>
+
+    <form action="/searchGame" method="GET">
         <input type="text" name="name" placeholder="Enter game name">
         <button type="submit">Search</button>
     </form>
-    
+
+    <hr>
+
+    <% 
+    let rating = null;
+
+    if (spyData && spyData.positive && spyData.negative) {
+        let total = spyData.positive + spyData.negative;
+        rating = Math.round((spyData.positive / total) * 100);
+    }
+    %>
+
     <% if (game) { %>
-        <h2><%= game.name %></h2>
-    
-        <img src="<%= game.header_image %>" width="300">
-    
-        <p><%= game.short_description %></p>
-    
-        <p>Release Date: <%= game.release_date.date %></p>
-    
-        <p>
-            Positive Ratings: <%= spyData?.positive %> <br>
-            Negative Ratings: <%= spyData?.negative %>
-        </p>
-    
+        <div style="margin-top:20px;">
+
+            <h2><%= game.name %></h2>
+
+            <!-- Image -->
+            <img src="<%= game.header_image %>" 
+                 style="width:400px; border-radius:10px;">
+
+            <!-- Description -->
+            <p><%= game.short_description %></p>
+
+            <!-- Price -->
+            <% if (game.price_overview) { %>
+                <p><strong>Price:</strong> 
+                $<%= (game.price_overview.final / 100).toFixed(2) %></p>
+            <% } else { %>
+                <p><strong>Price:</strong> Free / N/A</p>
+            <% } %>
+
+            <!-- Rating -->
+            <% if (rating !== null) { %>
+                <p><strong>Rating:</strong></p>
+                <div style="width:300px; background:#ddd; border-radius:10px;">
+                    <div style="
+                        width:<%= rating %>%;
+                        background:green;
+                        color:white;
+                        padding:5px;
+                        border-radius:10px;">
+                        <%= rating %>% Positive
+                    </div>
+                </div>
+            <% } else { %>
+                <p>No rating data</p>
+            <% } %>
+
+            <!-- Playtime -->
+            <% if (spyData && spyData.average_forever) { %>
+                <p><strong>Avg Playtime:</strong> 
+                <%= spyData.average_forever %> minutes</p>
+            <% } %>
+
+            <!-- Platforms -->
+            <% if (game.platforms) { %>
+                <div style="margin-top:10px;">
+                    <strong>Platforms:</strong>
+
+                    <% if (game.platforms.windows) { %>
+                        <span>🪟 Windows </span>
+                    <% } %>
+
+                    <% if (game.platforms.mac) { %>
+                        <span>🍎 Mac </span>
+                    <% } %>
+
+                    <% if (game.platforms.linux) { %>
+                        <span>🐧 Linux </span>
+                    <% } %>
+                </div>
+            <% } %>
+
+        </div>
     <% } %>
 
     <%- include("partials/footer.ejs") %>
+
 </body>
 </html>
