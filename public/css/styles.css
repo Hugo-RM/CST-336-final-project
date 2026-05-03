@@ -21,3 +21,84 @@ header {
     padding: 10px;
     text-align: center;
 }
+
+header button,
+header .btn {
+    background: rgba(255,255,255,0.55);
+    color: #0b1220;
+    border: 1px solid rgba(0,0,0,0.12);
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+header button:hover,
+header .btn:hover {
+    background: rgba(255,255,255,0.75);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Styles for login page (moved from views/login.ejs) */
+.login-page {
+    background-image: url('https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/09/video-game-collection.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+.login-page h1 {
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
+.login-page form {
+    background: rgba(255,255,255,0.55);
+    display: inline-block;
+    padding: 20px;
+    border-radius: 8px;
+    color: #0b1220;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+}
+
+.login-page form label,
+.login-page form p {
+    color: #071021;
+    font-weight: 600;
+}
+
+.login-page form input[type="text"],
+.login-page form input[type="password"],
+.login-page form input[type="email"],
+.login-page form textarea,
+.login-page form select {
+    background: rgba(255,255,255,0.96);
+    color: #000000;
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 6px 8px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.login-page form input::placeholder,
+.login-page form textarea::placeholder {
+    color: rgba(0,0,0,0.45);
+}
+
+.login-page .loginDiv {
+    position: relative;
+    display: inline-block;
+}
+
+.login-page .loginIcon {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    cursor: pointer;
+}
+
+.login-page .btn {
+    font-weight: 700;
+}
