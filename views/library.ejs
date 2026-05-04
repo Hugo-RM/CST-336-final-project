@@ -1,0 +1,22 @@
+<%- include("partials/header.ejs") %>
+
+<h1>My Game Library</h1>
+
+<a href="/library/new">Add New Game</a>
+
+<% if (games.length === 0) { %>
+  <p>No games added yet.</p>
+<% } else { %>
+  <ul>
+    <% games.forEach(game => { %>
+      <li>
+        <strong><%= game.title %></strong> —
+        <%= game.genre %>,
+        <%= game.platform %>,
+        Rating: <%= game.rating %>/10
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<%- include("partials/footer.ejs") %>

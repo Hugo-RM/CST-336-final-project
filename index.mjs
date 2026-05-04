@@ -50,6 +50,40 @@ app.get('/', async(req, res) => {
     res.render('login.ejs');
 });
 
+app.post('/login', async(req, res) => {
+    console.log(req.body);
+
+    let username = req.body.username;
+    let password = req.body.password;
+
+    console.log(username + ": " + password);
+
+    let hashedPassword = "";
+
+    let sql = `SELECT *
+               FROM admin
+               WHERE username = ?`;
+
+    const sqlParams = [username];
+    const [rows] = await pool.query(sql, sqlParams);
+
+    if (rows.length > 0) {
+        hashedPassword = rows[0].password;
+    }
+
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    console.log(match);
+
+    if (match) {
+        req.session.authenticated = true;
+        res.render('home.ejs', { game: null, spyData: null });
+    } else {
+        let loginError = 'Wrong Credentials';
+        res.render('login.ejs', {loginError});
+    }
+});
+
 app.get('/games', async (req, res) => {
     try {
         let url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
@@ -66,48 +100,6 @@ app.get('/games', async (req, res) => {
         res.send("Error fetching games");
     }
 });
-
-// app.get('/searchGame', async (req, res) => {
-//     let search = req.query.name?.toLowerCase();
-
-//     if (!search) {
-//         return res.render('home.ejs', { game: null, spyData: null });
-//     }
-
-//     try {
-//         // Step 1: get all apps
-//         let url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
-//         let response = await fetch(url);
-//         let data = await response.json();
-
-//         // Step 2: find matching game
-//         let gameMatch = data.applist.apps.find(app =>
-//             app.name.toLowerCase().includes(search)
-//         );
-
-//         if (!gameMatch) {
-//             return res.render('home.ejs', { game: null, spyData: null });
-//         }
-
-//         // Step 3: get game details
-//         let detailsUrl = `https://store.steampowered.com/api/appdetails?appids=${gameMatch.appid}`;
-//         let detailsRes = await fetch(detailsUrl);
-//         let detailsData = await detailsRes.json();
-
-//         let game = detailsData[gameMatch.appid].data;
-
-//         // Step 4: get ratings (SteamSpy)
-//         let spyUrl = `https://steamspy.com/api.php?request=appdetails&appid=${gameMatch.appid}`;
-//         let spyRes = await fetch(spyUrl);
-//         let spyData = await spyRes.json();
-
-//         res.render('home.ejs', { game, spyData });
-
-//     } catch (err) {
-//         console.error(err);
-//         res.send("Error searching game");
-//     }
-// });
 
 app.get('/searchGame', async (req, res) => {
     let search = req.query.name?.trim();
@@ -189,59 +181,42 @@ app.get('/searchGame', async (req, res) => {
     }
 });
 
-app.get('/games/new', isUserAuthenticated, (req, res) => {
-  res.render('newGame.ejs');
-});
+// =================== LIBRARY (user games) ========
 
-app.post('/games/new', isUserAuthenticated, async (req, res) => {
-  const { title, genre, platform, rating } = req.body;
-
-  const sql = `
-    INSERT INTO games (title, genre, platform, rating)
-    VALUES (?, ?, ?, ?)
-  `;
-
-  await pool.query(sql, [title, genre, platform, rating]);
-
-  res.redirect('/games');
-});
-
-app.get('/games', isUserAuthenticated, async (req, res) => {
-  const [games] = await pool.query('SELECT * FROM games ORDER BY title');
-  res.render('games.ejs', { games });
-});
-
-app.post('/login', async(req, res) => {
-    console.log(req.body);
-
-    let username = req.body.username;
-    let password = req.body.password;
-
-    console.log(username + ": " + password);
-
-    let hashedPassword = "";
-
-    let sql = `SELECT *
-               FROM admin
-               WHERE username = ?`;
-
-    const sqlParams = [username];
-    const [rows] = await pool.query(sql, sqlParams);
-
-    if (rows.length > 0) {
-        hashedPassword = rows[0].password;
+app.get('/library', isUserAuthenticated, async (req, res) => {
+    try {
+        const [games] = await pool.query('SELECT * FROM games ORDER BY title');
+        res.render('library.ejs', { games });
+    } catch (err) {
+        console.error('Library fetch error:', err);
+        res.status(500).send('Error loading library');
     }
+});
 
-    const match = await bcrypt.compare(password, hashedPassword);
+app.get('/library/new', isUserAuthenticated, (req, res) => {
+    res.render('newGame.ejs');
+});
 
-    console.log(match);
+app.post('/library/new', isUserAuthenticated, async (req, res) => {
+    try {
+        const { title, genre, platform } = req.body;
+        const rating = parseInt(req.body.rating, 10);
 
-    if (match) {
-        req.session.authenticated = true;
-        res.render('home.ejs', { game: null, spyData: null });
-    } else {
-        let loginError = 'Wrong Credentials';
-        res.render('login.ejs', {loginError});
+        if (!title || !genre || !platform) {
+            return res.status(400).send('Title, genre, and platform are required');
+        }
+        if (isNaN(rating) || rating < 1 || rating > 10) {
+            return res.status(400).send('Rating must be a number between 1 and 10');
+        }
+
+        await pool.query(
+            'INSERT INTO games (title, genre, platform, rating) VALUES (?, ?, ?, ?)',
+            [title, genre, platform, rating]
+        );
+        res.redirect('/library');
+    } catch (err) {
+        console.error('Library insert error:', err);
+        res.status(500).send('Error saving game');
     }
 });
 
