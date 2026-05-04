@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;900&display=swap');
 
 #my-title {
     font-family: 'Pixelify Sans', sans-serif;
     font-size: 80px;
     font-weight: bold;
     color: white;
-    -webkit-text-stroke: black 4px;
+    /* -webkit-text-stroke: black 4px; */
 }
 
 .title-like {
@@ -16,8 +17,351 @@
     /* -webkit-text-stroke: black 2px; */
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 header {
-    background-color: #0077ff;
+    background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
     padding: 10px;
     text-align: center;
+    margin: 0;
+    border: 3px solid rgba(0, 194, 194, 0.8);
+    border-radius: 0 0 20px 20px;
+    border-top: none;
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3), 0 8px 25px rgba(0, 194, 194, 0.5);
+    animation: headerGlow 2s infinite;
+}
+
+@keyframes headerGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3);
+        background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 194, 194, 0.9), inset 0 0 30px rgba(100, 230, 230, 0.5), 0 0 40px rgba(0, 180, 200, 0.5);
+        background: linear-gradient(135deg, #64e6e6, #00c2c2, #00b4c8);
+    }
+}
+
+header button,
+header .btn {
+    font-family: 'Baloo 2', sans-serif;
+    background: rgba(0, 194, 194, 0.15);
+    color: #000000;
+    border: 2px solid rgba(0, 194, 194, 0.5);
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    animation: buttonPulse 1.5s infinite;
+}
+
+@keyframes buttonPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 15px rgba(100, 230, 230, 0.4);
+    }
+}
+
+header button:hover,
+header .btn:hover {
+    background: rgba(0, 194, 194, 0.25);
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
+    transform: scale(1.05);
+}
+
+.nav-buttons {
+    font-family: 'Baloo 2', sans-serif;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    display: inline-block;
+    background: rgba(0, 194, 194, 0.15);
+    border: 2px solid rgba(0, 194, 194, 0.5);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 194, 194, 0.3), inset 0 0 10px rgba(100, 230, 230, 0.2);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    animation: buttonPulse 1.5s infinite;
+    font-weight: 600;
+}
+
+.nav-buttons:hover {
+    background: rgba(0, 194, 194, 0.25);
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
+    transform: scale(1.05);
+    color: #000000;
+}
+
+@keyframes homePageGlow {
+    0%, 100% {
+        background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    }
+    50% {
+        background: linear-gradient(135deg, #1E2AD8, #000FB5, #0066FF);
+    }
+}
+
+.home-page {
+    background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    min-height: 100vh;
+    animation: homePageGlow 3s infinite ease-in-out;
+}
+
+.search-title {
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #ffffff;
+}
+
+/* Styles for login page (moved from views/login.ejs) */
+.login-page {
+    background-image: url('https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/09/video-game-collection.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
+.login-page h1 {
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
+.login-page form {
+    background: rgba(255,255,255,0.55);
+    display: inline-block;
+    padding: 20px;
+    border-radius: 8px;
+    color: #0b1220;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    backdrop-filter: blur(4px);
+}
+
+.login-page form label,
+.login-page form p {
+    color: #071021;
+    font-weight: 600;
+}
+
+.login-page form input[type="text"],
+.login-page form input[type="password"],
+.login-page form input[type="email"],
+.login-page form textarea,
+.login-page form select {
+    background: rgba(255,255,255,0.96);
+    color: #000000;
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 6px 8px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.login-page form input::placeholder,
+.login-page form textarea::placeholder {
+    color: rgba(0,0,0,0.45);
+}
+
+.login-page .loginDiv {
+    position: relative;
+    display: inline-block;
+}
+
+.login-page .loginIcon {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    cursor: pointer;
+}
+
+.login-page .btn {
+    font-weight: 700;
+}
+
+.loveagame-pixel {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-weight: bold;
+}
+
+/* Retro Login Button Styling */
+@keyframes retroPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 194, 194, 0.7),
+                    inset 0 2px 0 #00c2c2,
+                    inset 0 -2px 0 #008c8c;
+    }
+    50% {
+        box-shadow: 0 0 20px 10px rgba(0, 194, 194, 0),
+                    inset 0 2px 0 #64e6e6,
+                    inset 0 -2px 0 #008c8c;
+    }
+}
+
+@keyframes retroGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(0, 194, 194, 0.8);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(0, 194, 194, 1), 0 0 30px rgba(0, 180, 200, 0.6);
+    }
+}
+
+.retro-login-btn {
+    font-family: 'Pixelify Sans', sans-serif !important;
+    background: linear-gradient(145deg, #00c2c2, #64e6e6);
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 15px 40px !important;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.1s ease;
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 5px 0 #000000;
+    animation: retroPulse 1.5s infinite, retroGlow 1.5s infinite;
+    position: relative;
+    top: 0;
+}
+
+.retro-login-btn:hover {
+    background: linear-gradient(145deg, #64e6e6, #00c2c2);
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 3px 0 #000000;
+}
+
+.retro-login-btn:active {
+    transform: translateY(5px);
+    box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 0 0 #000000;
+}
+
+/* Retro Search Button Styling */
+@keyframes searchPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7),
+                    inset 0 2px 0 #ffff00,
+                    inset 0 -2px 0 #ccaa00;
+    }
+    50% {
+        box-shadow: 0 0 20px 10px rgba(255, 255, 0, 0),
+                    inset 0 2px 0 #fff6a3,
+                    inset 0 -2px 0 #ccaa00;
+    }
+}
+
+@keyframes searchGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(255, 255, 0, 1), 0 0 30px rgba(255, 200, 0, 0.6);
+    }
+}
+
+.search-btn {
+    font-family: 'Baloo 2', sans-serif !important;
+    background: linear-gradient(145deg, #ffff00, #fff06a);
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    font-size: 16px;
+    font-weight: 900;
+    padding: 10px 26px !important;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.1s ease;
+    box-shadow: inset 0 2px 0 #fff6a3, inset 0 -2px 0 #ccaa00, 0 5px 0 #000000;
+    animation: searchPulse 1.5s infinite, searchGlow 1.5s infinite;
+    position: relative;
+    top: 0;
+}
+
+.search-btn:hover {
+    background: linear-gradient(145deg, #fff06a, #ffff00);
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #fff6a3, inset 0 -2px 0 #ccaa00, 0 3px 0 #000000;
+}
+
+.search-btn:active {
+    transform: translateY(5px);
+    box-shadow: inset 0 2px 0 #fff6a3, inset 0 -2px 0 #ccaa00, 0 0 0 #000000;
+}
+
+.search-input {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px 14px;
+    border: 3px solid #000000;
+    border-radius: 18px;
+    background: whitesmoke;
+    color: #000000;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(204, 170, 0, 0.6), 0 5px 0 #000000;
+    backdrop-filter: blur(4px);
+    transition: all 0.1s ease;
+    outline: none;
+    vertical-align: middle;
+}
+
+.search-input::placeholder {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.search-input:focus {
+    background: #ffffff;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.95), inset 0 -2px 0 rgba(204, 170, 0, 0.6), 0 0 12px rgba(255, 255, 255, 0.55), 0 5px 0 #000000;
+}
+
+.game-result-container {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    backdrop-filter: blur(6px);
+}
+
+.game-result-left,
+.game-result-right {
+    flex: 1;
+    font-family: Arial, sans-serif;
+}
+
+.game-result-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.game-title {
+    margin: 0;
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.game-image {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
+    display: block;
+}
+
+.game-detail {
+    margin: 0 0 14px;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+    .game-result-container {
+        flex-direction: column;
+    }
 }

@@ -1,26 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- remember to add a nav section -->
-     <title>Results for <!-- make script to but search input --></title>
-</html>
+<%- include("partials/header.ejs") %>
+
 <body>
-    <%- include('partials/header') %>
-    <!-- for loop for every single found result -->
+    <!-- for loop this section based on matches of the search result-->
      <section>
         <div>
-            <!-- game icon art cover -->
+            <!-- insert game name-->
         </div>
         <div>
-            <!-- game title -->
+            <!-- insert games art cover in icon format-->
         </div>
-        <!-- add date if possible -->
-        <div>
-            <!-- rating -->
-        </div>
+        <!-- if possible insert date of release and platforms -->
+         <div>
+            <!-- insert game rating-->
+         </div>
      </section>
-    <%- include('partials/footer') %>
+
+     <%- include('partials/footer') %>
 </body>
+</html>
