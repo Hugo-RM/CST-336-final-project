@@ -58,6 +58,7 @@ app.get('/games', async (req, res) => {
 
         // Get first 50 games (you can adjust)
         let games = data.applist.apps.slice(0, 50);
+        console.log(games);
 
         res.render('home.ejs', { games });
 
@@ -179,7 +180,7 @@ app.get('/searchGame', async (req, res) => {
                 console.log("SteamSpy returned non-JSON");
             }
         }
-
+        console.log(game);
         // 4. RENDER PAGE
         res.render('home.ejs', { game, spyData });
 
