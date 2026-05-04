@@ -102,48 +102,6 @@ app.get('/games', async (req, res) => {
     }
 });
 
-// app.get('/searchGame', async (req, res) => {
-//     let search = req.query.name?.toLowerCase();
-
-//     if (!search) {
-//         return res.render('home.ejs', { game: null, spyData: null, rating: null });
-//     }
-
-//     try {
-//         // Step 1: get all apps
-//         let url = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
-//         let response = await fetch(url);
-//         let data = await response.json();
-
-//         // Step 2: find matching game
-//         let gameMatch = data.applist.apps.find(app =>
-//             app.name.toLowerCase().includes(search)
-//         );
-
-//         if (!gameMatch) {
-//             return res.render('home.ejs', { game: null, spyData: null, rating: null });
-//         }
-
-//         // Step 3: get game details
-//         let detailsUrl = `https://store.steampowered.com/api/appdetails?appids=${gameMatch.appid}`;
-//         let detailsRes = await fetch(detailsUrl);
-//         let detailsData = await detailsRes.json();
-
-//         let game = detailsData[gameMatch.appid].data;
-
-//         // Step 4: get ratings (SteamSpy)
-//         let spyUrl = `https://steamspy.com/api.php?request=appdetails&appid=${gameMatch.appid}`;
-//         let spyRes = await fetch(spyUrl);
-//         let spyData = await spyRes.json();
-
-//         res.render('home.ejs', { game, spyData });
-
-//     } catch (err) {
-//         console.error(err);
-//         res.send("Error searching game");
-//     }
-// });
-
 app.get('/searchGame', async (req, res) => {
     let search = req.query.name?.trim();
 

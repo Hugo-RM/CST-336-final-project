@@ -17,11 +17,20 @@
     /* -webkit-text-stroke: black 2px; */
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 header {
     background: linear-gradient(135deg, #00c2c2, #00b4c8, #64e6e6);
     padding: 10px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3);
+    margin: 0;
+    border: 3px solid rgba(0, 194, 194, 0.8);
+    border-radius: 0 0 20px 20px;
+    border-top: none;
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.6), inset 0 0 20px rgba(100, 230, 230, 0.3), 0 8px 25px rgba(0, 194, 194, 0.5);
     animation: headerGlow 2s infinite;
 }
 
@@ -87,6 +96,26 @@ header .btn:hover {
     box-shadow: 0 0 20px rgba(0, 194, 194, 0.8), inset 0 0 15px rgba(100, 230, 230, 0.5);
     transform: scale(1.05);
     color: #000000;
+}
+
+@keyframes homePageGlow {
+    0%, 100% {
+        background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    }
+    50% {
+        background: linear-gradient(135deg, #1E2AD8, #000FB5, #0066FF);
+    }
+}
+
+.home-page {
+    background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    min-height: 100vh;
+    animation: homePageGlow 3s infinite ease-in-out;
+}
+
+.search-title {
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #ffffff;
 }
 
 /* Styles for login page (moved from views/login.ejs) */
@@ -208,4 +237,131 @@ header .btn:hover {
 .retro-login-btn:active {
     transform: translateY(5px);
     box-shadow: inset 0 2px 0 #64e6e6, inset 0 -2px 0 #008c8c, 0 0 0 #000000;
+}
+
+/* Retro Search Button Styling */
+@keyframes searchPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7),
+                    inset 0 2px 0 #ffff00,
+                    inset 0 -2px 0 #ccaa00;
+    }
+    50% {
+        box-shadow: 0 0 20px 10px rgba(255, 255, 0, 0),
+                    inset 0 2px 0 #fff6a3,
+                    inset 0 -2px 0 #ccaa00;
+    }
+}
+
+@keyframes searchGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(255, 255, 0, 1), 0 0 30px rgba(255, 200, 0, 0.6);
+    }
+}
+
+.search-btn {
+    font-family: 'Baloo 2', sans-serif !important;
+    background: linear-gradient(145deg, #ffff00, #fff06a);
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    font-size: 16px;
+    font-weight: 900;
+    padding: 10px 26px !important;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.1s ease;
+    box-shadow: inset 0 2px 0 #fff6a3, inset 0 -2px 0 #ccaa00, 0 5px 0 #000000;
+    animation: searchPulse 1.5s infinite, searchGlow 1.5s infinite;
+    position: relative;
+    top: 0;
+}
+
+.search-btn:hover {
+    background: linear-gradient(145deg, #fff06a, #ffff00);
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 0 #fff6a3, inset 0 -2px 0 #ccaa00, 0 3px 0 #000000;
+}
+
+.search-btn:active {
+    transform: translateY(5px);
+    box-shadow: inset 0 2px 0 #fff6a3, inset 0 -2px 0 #ccaa00, 0 0 0 #000000;
+}
+
+.search-input {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px 14px;
+    border: 3px solid #000000;
+    border-radius: 18px;
+    background: whitesmoke;
+    color: #000000;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 0 rgba(204, 170, 0, 0.6), 0 5px 0 #000000;
+    backdrop-filter: blur(4px);
+    transition: all 0.1s ease;
+    outline: none;
+    vertical-align: middle;
+}
+
+.search-input::placeholder {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.search-input:focus {
+    background: #ffffff;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.95), inset 0 -2px 0 rgba(204, 170, 0, 0.6), 0 0 12px rgba(255, 255, 255, 0.55), 0 5px 0 #000000;
+}
+
+.game-result-container {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    backdrop-filter: blur(6px);
+}
+
+.game-result-left,
+.game-result-right {
+    flex: 1;
+    font-family: Arial, sans-serif;
+}
+
+.game-result-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.game-title {
+    margin: 0;
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.game-image {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
+    display: block;
+}
+
+.game-detail {
+    margin: 0 0 14px;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+    .game-result-container {
+        flex-direction: column;
+    }
 }

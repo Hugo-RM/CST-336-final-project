@@ -13,74 +13,71 @@
     </style>
 
 </head>
-<body>
+<body class="home-page">
 
-    <h1>Search for a Game</h1>
+    <h1 class="search-title">Search for a Game</h1>
 
     <form action="/searchGame" method="GET">
-        <input type="text" name="name" placeholder="Enter game name">
-        <button type="submit">Search</button>
+        <input type="text" name="name" class="search-input" placeholder="Enter game name">
+        <button type="submit" class="search-btn">Search</button>
     </form>
 
     <hr>
 
     <% if (game) { %>
-        <div style="margin-top:20px;">
+        <div class="game-result-container">
+            <div class="game-result-left">
+                <h2 class="game-title"><%= game.name %></h2>
 
-            <h2><%= game.name %></h2>
+                <img class="game-image" src="<%= game.header_image %>" alt="<%= game.name %>">
+            </div>
 
-            <!-- Image -->
-            <img src="<%= game.header_image %>" 
-                 style="width:400px; border-radius:10px;">
+            <div class="game-result-right">
+                <p class="game-detail"><%= game.short_description %></p>
 
-            <!-- Description -->
-            <p><%= game.short_description %></p>
+                <% if (genre) { %>
+                    <p class="game-detail"><strong>Genre:</strong> <%= genre %></p>
+                <% } else { %>
+                    <p class="game-detail"><strong>Genre:</strong> N/A</p>
+                <% } %>
 
-            <!-- Price -->
-            <% if (game.price_overview) { %>
-                <p><strong>Price:</strong> 
-                $<%= (game.price_overview.final / 100).toFixed(2) %></p>
-            <% } else { %>
-                <p><strong>Price:</strong> Free / N/A</p>
-            <% } %>
+                <% if (game.price_overview) { %>
+                    <p class="game-detail"><strong>Price:</strong> $<%= (game.price_overview.final / 100).toFixed(2) %></p>
+                <% } else { %>
+                    <p class="game-detail"><strong>Price:</strong> Free / N/A</p>
+                <% } %>
 
             <!-- Rating -->
             <% if (rating !== null) { %>
-                <p><strong>Rating:</strong></p>
-                <div style="width:300px; background:#ddd; border-radius:10px;">
-                    <div id="rating">
-                        <%= rating %>% Positive
-                    </div>
-                </div>
+                <p class="game-detail"><strong>Rating:</strong> <%= rating %>% Positive</p>
             <% } else { %>
-                <p>No rating data</p>
+                <p class="game-detail"><strong>Rating:</strong> No rating data</p>
             <% } %>
 
-            <!-- Playtime -->
-            <% if (spyData && spyData.average_forever) { %>
-                <p><strong>Avg Playtime:</strong> 
-                <%= spyData.average_forever %> minutes</p>
+            <% if (game.metacritic && game.metacritic.score) { %>
+                <p class="game-detail"><strong>Metacritic:</strong> <%= game.metacritic.score %></p>
+            <% } else { %>
+                <p class="game-detail"><strong>Metacritic:</strong> N/A</p>
             <% } %>
 
-            <!-- Platforms -->
             <% if (game.platforms) { %>
-                <div style="margin-top:10px;">
+                <div class="game-detail">
                     <strong>Platforms:</strong>
 
                     <% if (game.platforms.windows) { %>
-                        <span>🪟 Windows </span>
+                        <span>Windows </span>
                     <% } %>
 
                     <% if (game.platforms.mac) { %>
-                        <span>🍎 Mac </span>
+                        <span>Mac </span>
                     <% } %>
 
                     <% if (game.platforms.linux) { %>
-                        <span>🐧 Linux </span>
+                        <span>Linux </span>
                     <% } %>
                 </div>
             <% } %>
-
+            </div>
         </div>
     <% } %>
 
