@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <%- include("partials/header.ejs") %>
-    <title>Results for <!-- insert search results string --> </title>
-</head>
+<%- include("partials/header.ejs") %>
+
 <body>
     <!-- for loop this section based on matches of the search result-->
      <section>
@@ -18,5 +14,7 @@
             <!-- insert game rating-->
          </div>
      </section>
+
+     <%- include('partials/footer') %>
 </body>
 </html>
