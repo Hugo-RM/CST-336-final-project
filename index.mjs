@@ -78,7 +78,7 @@ app.post('/login', async(req, res) => {
     if (match) {
         req.session.authenticated = true;
         req.session.userId = rows[0].id;
-        res.render('home.ejs', { game: null, spyData: null });
+        res.render('home.ejs', { game: null, spyData: null, rating: null });
     } else {
         let loginError = 'Wrong Credentials';
         res.render('login.ejs', {loginError});
@@ -106,7 +106,7 @@ app.get('/searchGame', async (req, res) => {
     let search = req.query.name?.trim();
 
     if (!search) {
-        return res.render('home.ejs', { game: null, spyData: null });
+        return res.render('home.ejs', { game: null, spyData: null, rating: null });
     }
 
     try {
@@ -127,7 +127,7 @@ app.get('/searchGame', async (req, res) => {
         let searchData = await searchRes.json();
 
         if (!searchData.items || searchData.items.length === 0) {
-            return res.render('home.ejs', { game: null, spyData: null });
+            return res.render('home.ejs', { game: null, spyData: null, rating: null });
         }
 
         let appid = searchData.items[0].id;
@@ -149,7 +149,7 @@ app.get('/searchGame', async (req, res) => {
         let detailsData = await detailsRes.json();
 
         if (!detailsData[appid] || !detailsData[appid].success) {
-            return res.render('home.ejs', { game: null, spyData: null });
+            return res.render('home.ejs', { game: null, spyData: null, rating: null });
         }
 
         let game = detailsData[appid].data;
@@ -174,11 +174,17 @@ app.get('/searchGame', async (req, res) => {
         }
 
         // 4. RENDER PAGE
-        res.render('home.ejs', { game, spyData });
+        let rating = null;
+        if (spyData && spyData.positive && spyData.negative) {
+            let total = spyData.positive + spyData.negative;
+            rating = Math.round((spyData.positive / total) * 100);
+        }
+
+        res.render('home.ejs', { game, spyData, rating });
 
     } catch (err) {
         console.error("Search error:", err);
-        res.render('home.ejs', { game: null, spyData: null });
+        res.render('home.ejs', { game: null, spyData: null, rating: null });
     }
 });
 
