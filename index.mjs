@@ -61,7 +61,7 @@ app.post('/login', async(req, res) => {
     let hashedPassword = "";
 
     let sql = `SELECT *
-               FROM admin
+               FROM users
                WHERE username = ?`;
 
     const sqlParams = [username];
@@ -77,6 +77,7 @@ app.post('/login', async(req, res) => {
 
     if (match) {
         req.session.authenticated = true;
+        req.session.userId = rows[0].id;
         res.render('home.ejs', { game: null, spyData: null });
     } else {
         let loginError = 'Wrong Credentials';
@@ -183,37 +184,33 @@ app.get('/searchGame', async (req, res) => {
 
 // =================== LIBRARY (user games) ========
 
-app.get('/library', isUserAuthenticated, async (req, res) => {
+app.get('/catalog', isUserAuthenticated, async (req, res) => {
     try {
         const [games] = await pool.query('SELECT * FROM games ORDER BY title');
-        res.render('library.ejs', { games });
+        res.render('catalog.ejs', { games });
     } catch (err) {
-        console.error('Library fetch error:', err);
-        res.status(500).send('Error loading library');
+        console.error('catalog fetch error:', err);
+        res.status(500).send('Error loading catalog');
     }
 });
 
-app.get('/library/new', isUserAuthenticated, (req, res) => {
+app.get('/catalog/new', isUserAuthenticated, (req, res) => {
     res.render('newGame.ejs');
 });
 
-app.post('/library/new', isUserAuthenticated, async (req, res) => {
+app.post('/catalog/new', isUserAuthenticated, async (req, res) => {
     try {
         const { title, genre, platform } = req.body;
-        const rating = parseInt(req.body.rating, 10);
 
         if (!title || !genre || !platform) {
             return res.status(400).send('Title, genre, and platform are required');
         }
-        if (isNaN(rating) || rating < 1 || rating > 10) {
-            return res.status(400).send('Rating must be a number between 1 and 10');
-        }
 
         await pool.query(
-            'INSERT INTO games (title, genre, platform, rating) VALUES (?, ?, ?, ?)',
-            [title, genre, platform, rating]
+            'INSERT INTO games (title, genre, platform) VALUES (?, ?, ?)',
+            [title, genre, platform]
         );
-        res.redirect('/library');
+        res.redirect('/catalog');
     } catch (err) {
         console.error('Library insert error:', err);
         res.status(500).send('Error saving game');
