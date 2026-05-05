@@ -145,6 +145,70 @@ header .btn:hover {
     animation: homePageGlow 3s infinite ease-in-out;
 }
 
+#rating {
+    background: green;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.catalog-page {
+    background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    min-height: 100vh;
+    padding: 20px;
+    animation: homePageGlow 3s infinite ease-in-out;
+}
+
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 16px;
+}
+
+.catalog-title {
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #ffffff;
+    font-size: 50px;
+    margin: 0;
+}
+
+.add-game-btn {
+    font-family: 'Baloo 2', sans-serif;
+    background: rgba(0, 194, 194, 0.25);
+    color: white;
+    border: 2px solid rgba(0, 194, 194, 0.5);
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 0 20px rgba(0, 194, 194, 0.5);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.add-game-btn:hover {
+    background: rgba(0, 194, 194, 0.4);
+    box-shadow: 0 0 30px rgba(0, 194, 194, 0.8);
+    transform: scale(1.05);
+    color: #ffffff;
+}
+
+.no-games-msg {
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin-top: 50px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
 /* Styles for login page (moved from views/login.ejs) */
 .login-page {
     background-image: url('https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/09/video-game-collection.jpg');

@@ -90,7 +90,11 @@
                             <p class="game-detail"><strong>Rating:</strong> Information not found</p>
                         <% } %>
 
-                        <a href="/review/game/<%= game.id %>" class="btn btn-primary mt-2">Review</a>
+                        <% if (game.id) { %>
+                            <a href="/review/game/<%= game.id %>" class="btn btn-primary mt-2">Review</a>
+                        <% } else if (game.steam_appid) { %>
+                            <a href="/review/steam/<%= game.steam_appid %>" class="btn btn-primary mt-2">Review</a>
+                        <% } %>
                     </div>
                 </div>
             <% }) %>

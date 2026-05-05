@@ -13,7 +13,7 @@
                     <div class="review-header">
                         <strong class="review-title">
                             <% if (r.steam_appid) { %>
-                                <a href="/review/<%= r.steam_appid %>"><%= r.title %></a>
+                                <a href="/review/steam/<%= r.steam_appid %>"><%= r.title %></a>
                             <% } else { %>
                                 <%= r.title %>
                             <% } %>
