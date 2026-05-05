@@ -46,9 +46,14 @@ app.use(session({
 }));
 
 //routes
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     if (req.session.authenticated) {
-        res.render('home.ejs', { game: null, spyData: null, rating: null });
+        let popularGames = [];
+        try {
+            const catalog = await fetchSteamCatalog();
+            popularGames = catalog.slice(0, 12);
+        } catch (e) {}
+        res.render('home.ejs', { game: null, spyData: null, rating: null, searchMsg: null, popularGames });
     } else {
         res.render('login.ejs');
     }
@@ -63,12 +68,8 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', async(req, res) => {
-    console.log(req.body);
-
     let username = req.body.username;
     let password = req.body.password;
-
-    console.log(username + ": " + password);
 
     let hashedPassword = "";
 
@@ -85,13 +86,11 @@ app.post('/login', async(req, res) => {
 
     const match = await bcrypt.compare(password, hashedPassword);
 
-    console.log(match);
-
     if (match) {
         req.session.authenticated = true;
         req.session.userId = rows[0].id;
         req.session.username = rows[0].username;
-        res.render('home.ejs', { game: null, spyData: null, rating: null });
+        res.redirect('/');
     } else {
         let loginError = 'Wrong Credentials';
         res.render('login.ejs', {loginError});
@@ -100,9 +99,30 @@ app.post('/login', async(req, res) => {
 
 app.post('/logout', (req, res) => {
     req.session.destroy(err => {
-        
         res.redirect('/login');
     });
+});
+
+app.get('/register', (req, res) => {
+    res.render('register.ejs', { error: null });
+});
+
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    if (!username?.trim() || !password?.trim()) {
+        return res.render('register.ejs', { error: 'Username and password are required.' });
+    }
+    try {
+        const hashed = await bcrypt.hash(password, 10);
+        await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username.trim(), hashed]);
+        res.redirect('/login');
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.render('register.ejs', { error: 'Username already taken.' });
+        }
+        console.error('register error:', err);
+        res.status(500).send('Error creating account');
+    }
 });
 
 app.get('/games', async (req, res) => {
@@ -114,7 +134,7 @@ app.get('/games', async (req, res) => {
         // Get first 50 games (you can adjust)
         let games = data.applist.apps.slice(0, 50);
 
-        res.render('home.ejs', { games, game: null, spyData: null, rating: null });
+        res.render('home.ejs', { games, game: null, spyData: null, rating: null, searchMsg: null, popularGames: [] });
 
     } catch (err) {
         console.error(err);
@@ -126,90 +146,60 @@ app.get('/searchGame', async (req, res) => {
     let search = req.query.name?.trim();
 
     if (!search) {
-        return res.render('home.ejs', { game: null, spyData: null, rating: null });
+        return res.redirect('/');
     }
 
     try {
-        // 1. SEARCH GAME BY NAME
         let searchUrl = `https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(search)}&l=english&cc=US`;
 
         let searchRes = await fetch(searchUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0',
-                'Accept': 'application/json'
-            }
+            headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }
         });
 
-        if (!searchRes.ok) {
-            throw new Error(`Search API failed: ${searchRes.status}`);
-        }
+        if (!searchRes.ok) throw new Error(`Search API failed: ${searchRes.status}`);
 
         let searchData = await searchRes.json();
 
         if (!searchData.items || searchData.items.length === 0) {
-            return res.render('home.ejs', { game: null, spyData: null, rating: null });
+            return res.render('home.ejs', { game: null, spyData: null, rating: null, searchMsg: `No results found for "${search}".`, popularGames: [] });
         }
 
         let appid = searchData.items[0].id;
 
-        // 2. GET GAME DETAILS
-        let detailsUrl = `https://store.steampowered.com/api/appdetails?appids=${appid}`;
-
-        let detailsRes = await fetch(detailsUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0',
-                'Accept': 'application/json'
-            }
+        let detailsRes = await fetch(`https://store.steampowered.com/api/appdetails?appids=${appid}`, {
+            headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }
         });
 
-        if (!detailsRes.ok) {
-            throw new Error(`Details API failed: ${detailsRes.status}`);
-        }
+        if (!detailsRes.ok) throw new Error(`Details API failed: ${detailsRes.status}`);
 
         let detailsData = await detailsRes.json();
 
         if (!detailsData[appid] || !detailsData[appid].success) {
-            return res.render('home.ejs', { game: null, spyData: null, rating: null });
+            return res.render('home.ejs', { game: null, spyData: null, rating: null, searchMsg: `No results found for "${search}".`, popularGames: [] });
         }
 
         let game = detailsData[appid].data;
 
-        // 3. GET STEAMSPY DATA
-        let spyUrl = `https://steamspy.com/api.php?request=appdetails&appid=${appid}`;
-
-        let spyRes = await fetch(spyUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0'
-            }
+        let spyRes = await fetch(`https://steamspy.com/api.php?request=appdetails&appid=${appid}`, {
+            headers: { 'User-Agent': 'Mozilla/5.0' }
         });
 
         let spyData = null;
-
         if (spyRes.ok) {
-            try {
-                spyData = await spyRes.json();
-            } catch {
-                console.log("SteamSpy returned non-JSON");
-            }
+            try { spyData = await spyRes.json(); } catch {}
         }
 
-        // 4. RENDER PAGE
         let rating = null;
         if (spyData && spyData.positive && spyData.negative) {
             let total = spyData.positive + spyData.negative;
             rating = Math.round((spyData.positive / total) * 100);
         }
 
-        // console.log('=====================================');
-        // console.log(`${JSON.stringify(game, null, 4)}\n====\n${JSON.stringify(spyData, null, 4)}`);
-        // console.log('=====================================');
-
-
-        res.render('home.ejs', { game, spyData, rating });
+        res.render('home.ejs', { game, spyData, rating, searchMsg: null, popularGames: [] });
 
     } catch (err) {
         console.error("Search error:", err);
-        res.render('home.ejs', { game: null, spyData: null, rating: null });
+        res.render('home.ejs', { game: null, spyData: null, rating: null, searchMsg: 'Something went wrong. Please try again.', popularGames: [] });
     }
 });
 
@@ -472,6 +462,17 @@ function isUserAuthenticated(req, res, next) {
         res.redirect('/');
     }
 }
+
+// =================== ERROR PAGES ==================
+
+app.use((req, res) => {
+    res.status(404).render('error.ejs', { code: 404, message: "We couldn't find that page." });
+});
+
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).render('error.ejs', { code: 500, message: 'Something went wrong on our end.' });
+});
 
 // ===================== SERVER =====================
 app.listen(3000, () => {

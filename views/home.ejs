@@ -1,12 +1,58 @@
 <%- include("partials/header.ejs") %>
 
 <style>
-    #rating {
-        width: <%= rating %>%;
-        background: green;
-        color: white;
-        padding: 5px;
-        border-radius: 10px;
+    .popular-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+        padding: 24px;
+    }
+
+    .popular-card {
+        background: #f5f8ff;
+        border: 2px solid #d8e4ff;
+        border-radius: 12px;
+        overflow: hidden;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: block;
+    }
+
+    .popular-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 51, 255, 0.2);
+        border-color: #00c2c2;
+    }
+
+    .popular-card img {
+        width: 100%;
+        display: block;
+    }
+
+    .popular-card-title {
+        font-family: 'Baloo 2', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: #10225f;
+        padding: 8px 10px;
+        line-height: 1.3;
+    }
+
+    .popular-section-title {
+        font-family: 'Pixelify Sans', sans-serif;
+        color: #ffffff;
+        font-size: 28px;
+        padding: 20px 24px 0;
+        margin: 0;
+    }
+
+    .search-msg {
+        font-family: 'Baloo 2', sans-serif;
+        color: #ffffff;
+        background: rgba(0,0,0,0.25);
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin: 16px 24px;
     }
 </style>
 
@@ -22,11 +68,14 @@
 </section>
 
 <section class="home-content">
+    <% if (searchMsg) { %>
+        <p class="search-msg"><%= searchMsg %></p>
+    <% } %>
+
     <% if (game) { %>
         <div class="game-result-container">
             <div class="game-result-left">
                 <h2 class="game-title"><%= game.name %></h2>
-
                 <img class="game-image" src="<%= game.header_image %>" alt="<%= game.name %>">
             </div>
 
@@ -45,7 +94,6 @@
                     <p class="game-detail"><strong>Price:</strong> Free / N/A</p>
                 <% } %>
 
-                <!-- Rating -->
                 <% if (rating !== null) { %>
                     <p class="game-detail"><strong>Rating:</strong> <%= rating %>% Positive</p>
                 <% } else { %>
@@ -61,18 +109,9 @@
                 <% if (game.platforms) { %>
                     <div class="game-detail">
                         <strong>Platforms:</strong>
-
-                        <% if (game.platforms.windows) { %>
-                            <span>Windows </span>
-                        <% } %>
-
-                        <% if (game.platforms.mac) { %>
-                            <span>Mac </span>
-                        <% } %>
-
-                        <% if (game.platforms.linux) { %>
-                            <span>Linux </span>
-                        <% } %>
+                        <% if (game.platforms.windows) { %><span>Windows </span><% } %>
+                        <% if (game.platforms.mac) { %><span>Mac </span><% } %>
+                        <% if (game.platforms.linux) { %><span>Linux </span><% } %>
                     </div>
                 <% } %>
 
@@ -80,7 +119,20 @@
             </div>
         </div>
     <% } %>
+
+    <% if (popularGames && popularGames.length > 0) { %>
+        <h2 class="popular-section-title">Popular Right Now</h2>
+        <div class="popular-grid">
+            <% popularGames.forEach(g => { %>
+                <a href="<%= g.reviewHref %>" class="popular-card">
+                    <img src="https://cdn.akamai.steamstatic.com/steam/apps/<%= g.appid %>/header.jpg"
+                         alt="<%= g.title %>"
+                         onerror="this.style.display='none'">
+                    <div class="popular-card-title"><%= g.title %></div>
+                </a>
+            <% }) %>
+        </div>
+    <% } %>
 </section>
 
 <%- include("partials/footer.ejs") %>
-

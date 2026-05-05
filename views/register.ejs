@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>loveagame | Register</title>
+</head>
+<body class="text-center login-page">
+
+    <h1 class="m-5">Join <span class="loveagame-pixel">loveagame</span></h1>
+    <h1 class="m-5">Create an account</h1>
+
+    <% if (error) { %>
+        <div class="alert alert-danger m-5"><%= error %></div>
+    <% } %>
+
+    <form action="/register" method="POST">
+        Username:<br>
+        <input type="text" name="username" required><br><br>
+
+        Password:<br>
+        <input type="password" name="password" required><br><br>
+
+        <button class="retro-login-btn">Register</button>
+    </form>
+
+    <p class="mt-4">Already have an account? <a href="/login">Log in</a></p>
+
+</body>
+</html>

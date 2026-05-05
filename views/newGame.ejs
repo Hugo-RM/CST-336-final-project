@@ -1,24 +1,110 @@
 <%- include("partials/header.ejs") %>
 
-<h1>Add a Game</h1>
+<style>
+    .new-game-page {
+        background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+        min-height: 100vh;
+        animation: homePageGlow 3s infinite ease-in-out;
+        padding: 32px 20px;
+    }
 
-<form action="/catalog/new" method="POST">
-  <label>
-    Title:
-    <input type="text" name="title" required>
-  </label>
+    .new-game-card {
+        max-width: 520px;
+        margin: 0 auto;
+        background: #f5f8ff;
+        border: 2px solid #d8e4ff;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0, 51, 255, 0.15);
+        padding: 32px;
+    }
 
-  <label>
-    Genre:
-    <input type="text" name="genre" required>
-  </label>
+    .new-game-title {
+        font-family: 'Pixelify Sans', sans-serif;
+        font-size: 32px;
+        color: #10225f;
+        margin: 0 0 24px;
+    }
 
-  <label>
-    Platform:
-    <input type="text" name="platform" required>
-  </label>
+    .new-game-label {
+        font-family: 'Baloo 2', sans-serif;
+        font-weight: 700;
+        color: #10225f;
+        margin-bottom: 6px;
+        display: block;
+    }
 
-  <button type="submit">Add Game</button>
-</form>
+    .new-game-input {
+        font-family: 'Baloo 2', sans-serif;
+        font-size: 15px;
+        width: 100%;
+        padding: 10px 14px;
+        border: 2px solid #d8e4ff;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #16213d;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        outline: none;
+    }
+
+    .new-game-input:focus {
+        border-color: #00c2c2;
+        box-shadow: 0 0 0 3px rgba(0, 194, 194, 0.15);
+    }
+
+    .new-game-submit {
+        font-family: 'Baloo 2', sans-serif;
+        font-weight: 900;
+        font-size: 15px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        background: linear-gradient(145deg, #00c2c2, #64e6e6);
+        color: #000000;
+        border: 2px solid #000000;
+        border-radius: 8px;
+        padding: 10px 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 0 #000000;
+        transition: all 0.1s ease;
+        position: relative;
+        top: 0;
+    }
+
+    .new-game-submit:hover {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #000000;
+    }
+
+    .new-game-submit:active {
+        transform: translateY(4px);
+        box-shadow: none;
+    }
+</style>
+
+<div class="new-game-page">
+    <div class="new-game-card">
+        <h1 class="new-game-title">Add a Game</h1>
+
+        <form action="/catalog/new" method="POST">
+            <div class="mb-3">
+                <label class="new-game-label">Title</label>
+                <input type="text" name="title" class="new-game-input" required placeholder="e.g. Hollow Knight">
+            </div>
+
+            <div class="mb-3">
+                <label class="new-game-label">Genre</label>
+                <input type="text" name="genre" class="new-game-input" required placeholder="e.g. Action, RPG">
+            </div>
+
+            <div class="mb-4">
+                <label class="new-game-label">Platform</label>
+                <input type="text" name="platform" class="new-game-input" required placeholder="e.g. PC, PS5">
+            </div>
+
+            <button type="submit" class="new-game-submit">Add Game</button>
+            <a href="/catalog" style="font-family:'Baloo 2',sans-serif; font-weight:700; color:#555; text-decoration:none; padding:10px 20px; border:2px solid #ccc; border-radius:8px; margin-left:12px; transition:all 0.2s ease;">Cancel</a>
+        </form>
+    </div>
+</div>
 
 <%- include("partials/footer.ejs") %>
