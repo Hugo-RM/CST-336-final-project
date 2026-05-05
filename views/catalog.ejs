@@ -84,13 +84,11 @@
                             <p class="game-detail"><strong>Platform:</strong> Information not found</p>
                         <% } %>
 
-                        <% if (game.rating) { %>
-                            <p class="game-detail"><strong>Rating:</strong> <%= game.rating %>/10</p>
-                        <% } else { %>
-                            <p class="game-detail"><strong>Rating:</strong> Information not found</p>
+                        <% if (game.avgRating !== null && game.avgRating !== undefined) { %>
+                            <p class="game-detail"><strong>Avg. Rating:</strong> <%= game.avgRating %>/10</p>
                         <% } %>
 
-                        <a href="/review/game/<%= game.id %>" class="btn btn-primary mt-2">Review</a>
+                        <a href="<%= game.reviewHref %>" class="btn btn-primary mt-2">Review</a>
                     </div>
                 </div>
             <% }) %>

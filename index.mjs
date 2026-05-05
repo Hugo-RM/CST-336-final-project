@@ -215,10 +215,75 @@ app.get('/searchGame', async (req, res) => {
 
 // ==================== CATALOG =================
 
+const steamCatalogCache = { data: null, fetchedAt: 0 };
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+async function fetchSteamCatalog() {
+    if (steamCatalogCache.data && Date.now() - steamCatalogCache.fetchedAt < CACHE_TTL_MS) {
+        return steamCatalogCache.data;
+    }
+
+    const spyRes = await fetch('https://steamspy.com/api.php?request=top100in2weeks', {
+        headers: { 'User-Agent': 'Mozilla/5.0' }
+    });
+    if (!spyRes.ok) return [];
+
+    const spyData = await spyRes.json();
+    const topGames = Object.values(spyData).slice(0, 50);
+
+    const detailResults = await Promise.allSettled(
+        topGames.map(g =>
+            fetch(`https://steamspy.com/api.php?request=appdetails&appid=${g.appid}`, {
+                headers: { 'User-Agent': 'Mozilla/5.0' }
+            }).then(r => r.json())
+        )
+    );
+
+    const result = topGames.map((g, i) => {
+        const detail = detailResults[i].status === 'fulfilled' ? detailResults[i].value : null;
+        return {
+            appid: String(g.appid),
+            title: g.name,
+            genre: detail?.genre || 'N/A',
+            platform: 'PC (Steam)',
+            reviewHref: `/review/steam/${g.appid}`
+        };
+    });
+
+    steamCatalogCache.data = result;
+    steamCatalogCache.fetchedAt = Date.now();
+    return result;
+}
+
 app.get('/catalog', isUserAuthenticated, async (req, res) => {
     try {
-        const [games] = await pool.query('SELECT * FROM games ORDER BY title');
-        res.render('catalog.ejs', { games });
+        const [dbGames] = await pool.query(
+            `SELECT g.*, ROUND(AVG(r.rating), 1) AS avg_rating
+             FROM games g
+             LEFT JOIN reviews r ON r.game_id = g.id
+             GROUP BY g.id
+             ORDER BY g.title`
+        );
+        const dbAppIds = new Set(dbGames.map(g => String(g.steam_appid)).filter(Boolean));
+
+        const normalizedDb = dbGames.map(g => ({
+            appid: String(g.steam_appid || ''),
+            title: g.title,
+            genre: g.genre,
+            platform: g.platform,
+            avgRating: g.avg_rating ?? null,
+            reviewHref: `/review/game/${g.id}`
+        }));
+
+        let steamGames = [];
+        try {
+            const catalog = await fetchSteamCatalog();
+            steamGames = catalog.filter(g => !dbAppIds.has(g.appid));
+        } catch (spyErr) {
+            console.error('SteamSpy fetch error:', spyErr);
+        }
+
+        res.render('catalog.ejs', { games: [...normalizedDb, ...steamGames] });
     } catch (err) {
         console.error('catalog fetch error:', err);
         res.status(500).send('Error loading catalog');
