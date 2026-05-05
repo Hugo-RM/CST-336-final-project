@@ -10,10 +10,10 @@
   <ul>
     <% games.forEach(game => { %>
       <li>
-        <strong><%= game.title %></strong> —
+        <strong><%= game.title %></strong> -
         <%= game.genre %>,
-        <%= game.platform %>,
-        <!-- Rating: <%= game.rating %>/10 -->
+        <%= game.platform %>
+        - <a href="/review/game/<%= game.id %>">Review</a>
       </li>
     <% }) %>
   </ul>
