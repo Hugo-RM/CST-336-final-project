@@ -46,8 +46,12 @@ app.use(session({
 }));
 
 //routes
-app.get('/', async(req, res) => {
-    res.render('login');
+app.get('/', (req, res) => {
+    if (req.session.authenticated) {
+        res.render('home.ejs', { game: null, spyData: null, rating: null });
+    } else {
+        res.render('login.ejs');
+    }
 });
 
 app.get('/login', (req, res) => {
