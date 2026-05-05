@@ -105,7 +105,7 @@ app.get('/games', async (req, res) => {
         // Get first 50 games (you can adjust)
         let games = data.applist.apps.slice(0, 50);
 
-        res.render('home.ejs', { games });
+        res.render('home.ejs', { games, game: null, spyData: null, rating: null });
 
     } catch (err) {
         console.error(err);
@@ -190,6 +190,11 @@ app.get('/searchGame', async (req, res) => {
             let total = spyData.positive + spyData.negative;
             rating = Math.round((spyData.positive / total) * 100);
         }
+
+        // console.log('=====================================');
+        // console.log(`${JSON.stringify(game, null, 4)}\n====\n${JSON.stringify(spyData, null, 4)}`);
+        // console.log('=====================================');
+
 
         res.render('home.ejs', { game, spyData, rating });
 
