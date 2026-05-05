@@ -217,7 +217,52 @@ app.get('/searchGame', async (req, res) => {
 
 app.get('/catalog', isUserAuthenticated, async (req, res) => {
     try {
-        const [games] = await pool.query('SELECT * FROM games ORDER BY title');
+        const [dbGames] = await pool.query('SELECT * FROM games ORDER BY title');
+        const dbAppIds = new Set(dbGames.map(g => String(g.steam_appid)).filter(Boolean));
+
+        // Normalize DB games
+        const normalizedDb = dbGames.map(g => ({
+            title: g.title,
+            genre: g.genre,
+            platform: g.platform,
+            reviewHref: `/review/game/${g.id}`
+        }));
+
+        // Fetch top 100 from SteamSpy, dedupe against DB games, then fetch genre per game
+        let steamGames = [];
+        try {
+            const spyRes = await fetch('https://steamspy.com/api.php?request=top100in2weeks', {
+                headers: { 'User-Agent': 'Mozilla/5.0' }
+            });
+            if (spyRes.ok) {
+                const spyData = await spyRes.json();
+                const topGames = Object.values(spyData)
+                    .filter(g => !dbAppIds.has(String(g.appid)))
+                    .slice(0, 50);
+
+                const detailResults = await Promise.allSettled(
+                    topGames.map(g =>
+                        fetch(`https://steamspy.com/api.php?request=appdetails&appid=${g.appid}`, {
+                            headers: { 'User-Agent': 'Mozilla/5.0' }
+                        }).then(r => r.json())
+                    )
+                );
+
+                steamGames = topGames.map((g, i) => {
+                    const detail = detailResults[i].status === 'fulfilled' ? detailResults[i].value : null;
+                    return {
+                        title: g.name,
+                        genre: detail?.genre || 'N/A',
+                        platform: 'PC (Steam)',
+                        reviewHref: `/review/steam/${g.appid}`
+                    };
+                });
+            }
+        } catch (spyErr) {
+            console.error('SteamSpy fetch error:', spyErr);
+        }
+
+        const games = [...normalizedDb, ...steamGames];
         res.render('catalog.ejs', { games });
     } catch (err) {
         console.error('catalog fetch error:', err);
