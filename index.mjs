@@ -412,7 +412,7 @@ app.post('/review/steam/:appid', isUserAuthenticated, async (req, res) => {
         await pool.query(
             `INSERT INTO games (title, genre, platform, steam_appid)
              VALUES (?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE title = VALUES(title)`,
+             ON DUPLICATE KEY UPDATE title = VALUES(title), genre = VALUES(genre), platform = VALUES(platform)`,
             [title, genre, platform, appid]
         );
 
