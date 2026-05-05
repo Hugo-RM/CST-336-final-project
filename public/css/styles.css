@@ -108,15 +108,41 @@ header .btn:hover {
     }
 }
 
+@keyframes footerGlowSmoke {
+    0%, 100% {
+        background: whitesmoke;
+    }
+    50% {
+        background: linear-gradient(135deg, whitesmoke, #f5f5f5, #fffaf0);
+    }
+}
+
 .home-page {
-    background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    background: #ffffff;
     min-height: 100vh;
+}
+
+.home-hero {
+    background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    padding: 24px 0 28px;
     animation: homePageGlow 3s infinite ease-in-out;
 }
 
 .search-title {
     font-family: 'Pixelify Sans', sans-serif;
     color: #ffffff;
+}
+
+.home-divider {
+    margin: 12px 0 0;
+    border: 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+.home-content {
+    background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+    padding: 32px 0 0;
+    animation: homePageGlow 3s infinite ease-in-out;
 }
 
 /* Styles for login page (moved from views/login.ejs) */
@@ -320,12 +346,12 @@ header .btn:hover {
 .game-result-container {
     display: flex;
     gap: 24px;
-    margin-top: 24px;
+    margin-top: 0;
     padding: 24px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: #f5f8ff;
+    border: 2px solid #d8e4ff;
     border-radius: 18px;
-    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 30px rgba(0, 51, 255, 0.08);
 }
 
 .game-result-left,
@@ -344,7 +370,7 @@ header .btn:hover {
     margin: 0;
     font-family: 'Pixelify Sans', sans-serif;
     font-size: 30px;
-    color: #ffffff;
+    color: #10225f;
 }
 
 .game-image {
@@ -356,7 +382,7 @@ header .btn:hover {
 
 .game-detail {
     margin: 0 0 14px;
-    color: #ffffff;
+    color: #16213d;
     font-family: Arial, sans-serif;
     line-height: 1.5;
 }

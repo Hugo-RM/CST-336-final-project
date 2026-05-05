@@ -37,6 +37,10 @@
     </form>
 
     <script>
+        // Auto-fill test credentials
+        document.querySelector('input[name="username"]').value = 'admin';
+        document.querySelector('input[name="password"]').value = 's3cr3t';
+
         const eyeIcon = document.querySelector("#eyeIcon");;
         eyeIcon.addEventListener("click", () => {
             const isHidden = pwd.type === "password";

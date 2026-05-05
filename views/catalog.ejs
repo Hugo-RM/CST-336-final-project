@@ -1,22 +1,101 @@
 <%- include("partials/header.ejs") %>
 
-<h1>My Game Library</h1>
+<style>
+    .catalog-page {
+        background: linear-gradient(135deg, #000FB5, #0033FF, #1E2AD8);
+        min-height: 100vh;
+        animation: homePageGlow 3s infinite ease-in-out;
+        padding: 20px;
+    }
 
-<a href="/catalog/new">Add New Game</a>
+    .catalog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
 
-<% if (games.length === 0) { %>
-  <p>No games added yet.</p>
-<% } else { %>
-  <ul>
-    <% games.forEach(game => { %>
-      <li>
-        <strong><%= game.title %></strong> -
-        <%= game.genre %>,
-        <%= game.platform %>
-        - <a href="/review/game/<%= game.id %>">Review</a>
-      </li>
-    <% }) %>
-  </ul>
-<% } %>
+    .catalog-title {
+        font-family: 'Pixelify Sans', sans-serif;
+        color: #ffffff;
+        font-size: 50px;
+    }
+
+    .add-game-btn {
+        font-family: 'Baloo 2', sans-serif;
+        background: rgba(0, 194, 194, 0.25);
+        color: white;
+        border: 2px solid rgba(0, 194, 194, 0.5);
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 0 20px rgba(0, 194, 194, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .add-game-btn:hover {
+        background: rgba(0, 194, 194, 0.4);
+        box-shadow: 0 0 30px rgba(0, 194, 194, 0.8);
+        transform: scale(1.05);
+    }
+
+    .no-games-msg {
+        color: #ffffff;
+        font-size: 20px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        margin-top: 50px;
+    }
+
+    .games-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+</style>
+
+<div class="catalog-page">
+    <div class="catalog-header">
+        <h1 class="catalog-title">My Game Library</h1>
+        <a href="/catalog/new" class="add-game-btn">Add New Game</a>
+    </div>
+
+    <% if (games.length === 0) { %>
+        <p class="no-games-msg">No games added yet.</p>
+    <% } else { %>
+        <div class="games-grid">
+            <% games.forEach(game => { %>
+                <div class="game-result-container">
+                    <div class="game-result-left">
+                        <h2 class="game-title"><%= game.title || 'Information not found' %></h2>
+                    </div>
+
+                    <div class="game-result-right">
+                        <% if (game.genre) { %>
+                            <p class="game-detail"><strong>Genre:</strong> <%= game.genre %></p>
+                        <% } else { %>
+                            <p class="game-detail"><strong>Genre:</strong> Information not found</p>
+                        <% } %>
+
+                        <% if (game.platform) { %>
+                            <p class="game-detail"><strong>Platform:</strong> <%= game.platform %></p>
+                        <% } else { %>
+                            <p class="game-detail"><strong>Platform:</strong> Information not found</p>
+                        <% } %>
+
+                        <% if (game.rating) { %>
+                            <p class="game-detail"><strong>Rating:</strong> <%= game.rating %>/10</p>
+                        <% } else { %>
+                            <p class="game-detail"><strong>Rating:</strong> Information not found</p>
+                        <% } %>
+
+                        <a href="/review/game/<%= game.id %>" class="btn btn-primary mt-2">Review</a>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>
 
 <%- include("partials/footer.ejs") %>
