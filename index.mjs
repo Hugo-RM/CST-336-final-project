@@ -50,6 +50,10 @@ app.get('/', async(req, res) => {
     res.render('login');
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
 app.post('/login', async(req, res) => {
     console.log(req.body);
 
@@ -83,6 +87,13 @@ app.post('/login', async(req, res) => {
         let loginError = 'Wrong Credentials';
         res.render('login.ejs', {loginError});
     }
+});
+
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        
+        res.redirect('/login');
+    });
 });
 
 app.get('/games', async (req, res) => {

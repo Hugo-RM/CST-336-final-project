@@ -75,6 +75,7 @@ header .btn:hover {
 }
 
 .nav-buttons {
+    all: unset;
     font-family: 'Baloo 2', sans-serif;
     color: white;
     text-decoration: none;
