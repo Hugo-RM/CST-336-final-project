@@ -13,7 +13,7 @@
 
     <form action="<%= gameId ? '/review/game/' + gameId : '/review/steam/' + steamAppid %>" method="POST">
         <div class="mb-3">
-            <label for="rating" class="form-label"><strong>Rating (1–10)</strong></label>
+            <label for="rating" class="form-label review-rating-label"><strong>Rating (1–10)</strong></label>
             <input type="number" id="rating" name="rating" class="form-control"
                    min="1" max="10" required
                    value="<%= existing ? existing.rating : '' %>">

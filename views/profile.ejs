@@ -18,9 +18,9 @@
                                 <%= r.title %>
                             <% } %>
                         </strong>
-                        <span class="badge bg-primary"><%= r.rating %>/10</span>
+                        <span class="badge bg-primary review-rating"><%= r.rating %>/10</span>
                     </div>
-                    <p class="review-text"><%= r.review_text %></p>
+                    <p class="review-text"><strong class="review-label">Review:</strong> <%= r.review_text %></p>
                     <small class="review-date"><%= new Date(r.created_at).toLocaleDateString() %></small>
                 </div>
             <% }) %>

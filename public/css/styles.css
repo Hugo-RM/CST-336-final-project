@@ -446,6 +446,21 @@ header .btn:hover {
     color: #00c2c2;
 }
 
+.review-rating-label {
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #10225f;
+}
+
+.review-rating {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 16px;
+}
+
+.review-label {
+    font-family: 'Baloo 2', sans-serif;
+    color: #10225f;
+}
+
 .review-text {
     color: #16213d;
     margin: 12px 0;
