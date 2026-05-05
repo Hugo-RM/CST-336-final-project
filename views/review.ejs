@@ -1,0 +1,33 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container mt-4">
+    <h2 class="game-title">Review: <%= title %></h2>
+
+    <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <% if (existing) { %>
+        <div class="alert alert-info">You've already reviewed this game. Submitting will update your review.</div>
+    <% } %>
+
+    <form action="<%= gameId ? '/review/game/' + gameId : '/review/steam/' + steamAppid %>" method="POST">
+        <div class="mb-3">
+            <label for="rating" class="form-label"><strong>Rating (1–10)</strong></label>
+            <input type="number" id="rating" name="rating" class="form-control"
+                   min="1" max="10" required
+                   value="<%= existing ? existing.rating : '' %>">
+        </div>
+
+        <div class="mb-3">
+            <label for="review_text" class="form-label"><strong>Review</strong></label>
+            <textarea id="review_text" name="review_text" class="form-control"
+                      rows="5" required><%= existing ? existing.review_text : '' %></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+        <a href="/catalog" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+<%- include("partials/footer.ejs") %>
