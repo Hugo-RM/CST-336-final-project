@@ -334,7 +334,7 @@ app.get('/review/game/:id', isUserAuthenticated, async (req, res) => {
             [req.session.userId, game.id]
         );
 
-        res.render('review.ejs', { title: game.title, gameId: game.id, existing: existing || null, error: null });
+        res.render('review.ejs', { title: game.title, gameId: game.id, steamAppid: game.steam_appid || null, existing: existing || null, error: null });
     } catch (err) {
         console.error('review/game GET error:', err);
         res.status(500).send('Error loading review page');
@@ -437,7 +437,7 @@ app.post('/review/steam/:appid', isUserAuthenticated, async (req, res) => {
 app.get('/profile', isUserAuthenticated, async (req, res) => {
     try {
         const [reviews] = await pool.query(
-            `SELECT g.title, g.steam_appid, r.rating, r.review_text, r.created_at
+            `SELECT g.id AS game_id, g.title, g.steam_appid, r.rating, r.review_text, r.created_at
              FROM reviews r
              JOIN games g ON r.game_id = g.id
              WHERE r.user_id = ?
