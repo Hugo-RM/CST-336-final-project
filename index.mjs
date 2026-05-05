@@ -257,7 +257,13 @@ async function fetchSteamCatalog() {
 
 app.get('/catalog', isUserAuthenticated, async (req, res) => {
     try {
-        const [dbGames] = await pool.query('SELECT * FROM games ORDER BY title');
+        const [dbGames] = await pool.query(
+            `SELECT g.*, ROUND(AVG(r.rating), 1) AS avg_rating
+             FROM games g
+             LEFT JOIN reviews r ON r.game_id = g.id
+             GROUP BY g.id
+             ORDER BY g.title`
+        );
         const dbAppIds = new Set(dbGames.map(g => String(g.steam_appid)).filter(Boolean));
 
         const normalizedDb = dbGames.map(g => ({
@@ -265,6 +271,7 @@ app.get('/catalog', isUserAuthenticated, async (req, res) => {
             title: g.title,
             genre: g.genre,
             platform: g.platform,
+            avgRating: g.avg_rating ?? null,
             reviewHref: `/review/game/${g.id}`
         }));
 
