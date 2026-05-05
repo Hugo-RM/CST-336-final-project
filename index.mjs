@@ -90,6 +90,7 @@ app.post('/login', async(req, res) => {
     if (match) {
         req.session.authenticated = true;
         req.session.userId = rows[0].id;
+        req.session.username = rows[0].username;
         res.render('home.ejs', { game: null, spyData: null, rating: null });
     } else {
         let loginError = 'Wrong Credentials';
@@ -212,7 +213,7 @@ app.get('/searchGame', async (req, res) => {
     }
 });
 
-// =================== LIBRARY (user games) ========
+// ==================== CATALOG =================
 
 app.get('/catalog', isUserAuthenticated, async (req, res) => {
     try {
@@ -244,6 +245,144 @@ app.post('/catalog/new', isUserAuthenticated, async (req, res) => {
     } catch (err) {
         console.error('Library insert error:', err);
         res.status(500).send('Error saving game');
+    }
+});
+
+// =================== REVIEWS =====================
+
+async function fetchSteamDetails(appid) {
+    const res = await fetch(`https://store.steampowered.com/api/appdetails?appids=${appid}`, {
+        headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' }
+    });
+    const data = await res.json();
+    return data[appid]?.success ? data[appid].data : null;
+}
+
+// For games already in the DB (catalog — manual or Steam-sourced)
+app.get('/review/game/:id', isUserAuthenticated, async (req, res) => {
+    try {
+        const [[game]] = await pool.query('SELECT * FROM games WHERE id = ?', [req.params.id]);
+        if (!game) return res.status(404).send('Game not found');
+
+        const [[existing]] = await pool.query(
+            'SELECT * FROM reviews WHERE user_id = ? AND game_id = ?',
+            [req.session.userId, game.id]
+        );
+
+        res.render('review.ejs', { title: game.title, gameId: game.id, existing: existing || null, error: null });
+    } catch (err) {
+        console.error('review/game GET error:', err);
+        res.status(500).send('Error loading review page');
+    }
+});
+
+app.post('/review/game/:id', isUserAuthenticated, async (req, res) => {
+    const { rating, review_text } = req.body;
+    const ratingNum = parseInt(rating, 10);
+
+    try {
+        const [[game]] = await pool.query('SELECT * FROM games WHERE id = ?', [req.params.id]);
+        if (!game) return res.status(404).send('Game not found');
+
+        if (!ratingNum || ratingNum < 1 || ratingNum > 10 || !review_text?.trim()) {
+            return res.render('review.ejs', { title: game.title, gameId: game.id, existing: null, error: 'Rating must be 1–10 and review text is required.' });
+        }
+
+        await pool.query(
+            `INSERT INTO reviews (user_id, game_id, rating, review_text)
+             VALUES (?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE rating = VALUES(rating), review_text = VALUES(review_text)`,
+            [req.session.userId, game.id, ratingNum, review_text.trim()]
+        );
+
+        res.redirect('/catalog');
+    } catch (err) {
+        console.error('review/game POST error:', err);
+        res.status(500).send('Error saving review');
+    }
+});
+
+// For games from Steam search that may not be in the DB yet
+app.get('/review/steam/:appid', isUserAuthenticated, async (req, res) => {
+    const appid = req.params.appid;
+    try {
+        const gameData = await fetchSteamDetails(appid);
+        if (!gameData) return res.status(404).send('Game not found on Steam');
+
+        const [[existing]] = await pool.query(
+            `SELECT r.* FROM reviews r
+             JOIN games g ON r.game_id = g.id
+             WHERE r.user_id = ? AND g.steam_appid = ?`,
+            [req.session.userId, appid]
+        );
+
+        res.render('review.ejs', { title: gameData.name, gameId: null, steamAppid: appid, existing: existing || null, error: null });
+    } catch (err) {
+        console.error('review/steam GET error:', err);
+        res.status(500).send('Error loading review page');
+    }
+});
+
+app.post('/review/steam/:appid', isUserAuthenticated, async (req, res) => {
+    const appid = req.params.appid;
+    const { rating, review_text } = req.body;
+    const ratingNum = parseInt(rating, 10);
+
+    try {
+        const gameData = await fetchSteamDetails(appid);
+        if (!gameData) return res.status(404).send('Game not found on Steam');
+
+        if (!ratingNum || ratingNum < 1 || ratingNum > 10 || !review_text?.trim()) {
+            return res.render('review.ejs', { title: gameData.name, gameId: null, steamAppid: appid, existing: null, error: 'Rating must be 1–10 and review text is required.' });
+        }
+
+        const title = gameData.name;
+        const genre = gameData.genres?.map(g => g.description).join(', ') || 'Unknown';
+        const platform = [
+            gameData.platforms?.windows ? 'Windows' : null,
+            gameData.platforms?.mac ? 'Mac' : null,
+            gameData.platforms?.linux ? 'Linux' : null,
+        ].filter(Boolean).join(', ') || 'Unknown';
+
+        await pool.query(
+            `INSERT INTO games (title, genre, platform, steam_appid)
+             VALUES (?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE title = VALUES(title)`,
+            [title, genre, platform, appid]
+        );
+
+        const [[gameRow]] = await pool.query('SELECT id FROM games WHERE steam_appid = ?', [appid]);
+
+        await pool.query(
+            `INSERT INTO reviews (user_id, game_id, rating, review_text)
+             VALUES (?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE rating = VALUES(rating), review_text = VALUES(review_text)`,
+            [req.session.userId, gameRow.id, ratingNum, review_text.trim()]
+        );
+
+        res.redirect('/catalog');
+    } catch (err) {
+        console.error('review/steam POST error:', err);
+        res.status(500).send('Error saving review');
+    }
+});
+
+// =================== PROFILE ======================
+
+app.get('/profile', isUserAuthenticated, async (req, res) => {
+    try {
+        const [reviews] = await pool.query(
+            `SELECT g.title, g.steam_appid, r.rating, r.review_text, r.created_at
+             FROM reviews r
+             JOIN games g ON r.game_id = g.id
+             WHERE r.user_id = ?
+             ORDER BY r.created_at DESC`,
+            [req.session.userId]
+        );
+        res.render('profile.ejs', { username: req.session.username, reviews });
+    } catch (err) {
+        console.error('profile error:', err);
+        res.status(500).send('Error loading profile');
     }
 });
 
