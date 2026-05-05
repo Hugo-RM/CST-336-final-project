@@ -392,3 +392,79 @@ header .btn:hover {
         flex-direction: column;
     }
 }
+
+/* Review Container Styles */
+.reviews-heading {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    color: #10225f;
+}
+
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 600px;
+}
+
+.review-card {
+    padding: 20px;
+    background: #f5f8ff;
+    border: 2px solid #d8e4ff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 51, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 51, 255, 0.15);
+    transform: translateY(-2px);
+    border-color: #00c2c2;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.review-title {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 18px;
+    color: #10225f;
+    margin: 0;
+}
+
+.review-title a {
+    color: #10225f;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.review-title a:hover {
+    color: #00c2c2;
+}
+
+.review-text {
+    color: #16213d;
+    margin: 12px 0;
+    line-height: 1.6;
+    font-family: Arial, sans-serif;
+}
+
+.review-date {
+    color: #8899b0;
+    font-family: Arial, sans-serif;
+}
+
+@media (max-width: 800px) {
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .badge {
+        margin-top: 8px;
+    }
+}
